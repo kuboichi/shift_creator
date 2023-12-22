@@ -32,4 +32,5 @@ class ShiftsController < ApplicationController
                 end
             end
             params.require(:shift).permit(allowed_params)
+        end
 end
