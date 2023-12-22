@@ -26,6 +26,10 @@ class ShiftsController < ApplicationController
 
     private
         def shift_params
-            params.require(:people_needed).permit(:time, :week_day)
-        end
+            allowed_params = (0..47).flat_map do |time|
+                (0..6).map do |week_day|
+                    "week_day_#{time}_#{week_day}".to_sym
+                end
+            end
+            params.require(:shift).permit(allowed_params)
 end
