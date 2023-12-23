@@ -1,4 +1,7 @@
 class Shift < ApplicationRecord
+    include ActiveModel::Validations
+    validates_with WeekdayPeopleValidator
+
     # 各時間帯ごとの必要な人数のカラムを指定
     (0..47).each do |time|
         (0..6).each do |week_day|
