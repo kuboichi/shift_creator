@@ -1,4 +1,6 @@
-/* Custom styles go here */
+@import "bootstrap-sprockets";
+@import "bootstrap";
+
 
 body {
     background-color: #f8f9fa;
@@ -16,4 +18,28 @@ body {
 .btn-primary {
     background-color: #007bff;
     color: #fff;
+}
+
+
+h1 {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+th, td {
+    text-align: center;
+}
+  
+/* Optional: Style the "Save" button */
+input[type="submit"] {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color: #0056b3;
 }
