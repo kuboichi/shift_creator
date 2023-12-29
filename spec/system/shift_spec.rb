@@ -11,4 +11,21 @@ RSpec.describe "shifts", type: :system do
         click_on "Create"
         expect(page).to have_text("各時間に必要な人数")
     end
+
+    describe "Shift.new" do
+
+        it 'Create a new shift' do
+            visit new_shift_path
+            click_button "Save"
+            expect(page).to have_content "保存成功"
+        end
+
+        it "Create a wrong shift data" do
+            visit new_shift_path
+            fill_in "shift[week_day_0_0]", with: nil
+            week_day_0_0= nil
+            click_button "Save"
+            expect(page).to have_content "保存失敗"
+        end
+    end
 end
