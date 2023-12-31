@@ -7,7 +7,7 @@ class ShiftsController < ApplicationController
         @shift = Shift.new(shift_params)
         if @shift.save
             flash[:success] = "保存成功"
-            redirect_to new_share_calendar_path
+            redirect_to share_path
         else
             flash.now[:danger] = "保存失敗"
             render :new
@@ -21,6 +21,9 @@ class ShiftsController < ApplicationController
     end
 
     def destroy
+    end
+
+    def share
     end
 
     private
