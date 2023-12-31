@@ -2,7 +2,7 @@
   <p class="h6">以下のURLをアルバイトの方に共有して下さい。</p>
   <div class="input-group mb-3">
     <!-- リンクを一時的にroot_urlにしている -->
-    <input type="text" class="form-control" id="sharedUrl" value="<%= root_url %>" readonly>
+    <input type="text" class="form-control" id="sharedUrl" value="<%= @token %>" readonly>
     <button class="btn btn-outline-secondary" type="button" onclick="copySharedUrl()">コピー</button>
   </div>
   

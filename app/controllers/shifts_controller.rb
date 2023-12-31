@@ -24,6 +24,7 @@ class ShiftsController < ApplicationController
     end
 
     def share
+        @token = Shift.new_token
     end
 
     private
