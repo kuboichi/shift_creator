@@ -6,8 +6,10 @@ class ShiftsController < ApplicationController
         logger.debug "Params: #{params.inspect}"
         @shift = Shift.new(shift_params)
         if @shift.save
+            shift_id = @shift.id # Get the id of @shift
             flash[:success] = "保存成功"
-            redirect_to share_path
+            link = id_to_token(@shift.id)
+            redirect_to share_path(link)
         else
             flash.now[:danger] = "保存失敗"
             render :new
@@ -24,7 +26,6 @@ class ShiftsController < ApplicationController
     end
 
     def share
-        @token = Shift.new_token
     end
 
     private

@@ -1,21 +1,32 @@
 <div class="container">
-  <p class="h6">以下のURLをアルバイトの方に共有して下さい。</p>
-  <div class="input-group mb-3">
+    <p class="h6">以下のURLをアルバイトの方に共有して下さい。</p>
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" id="sharedUrl" readonly>
+        <button class="btn btn-outline-secondary" type="button" onclick="copySharedUrl()">コピー</button>
+    </div>
+                
     <!-- リンクを一時的にroot_urlにしている -->
-    <input type="text" class="form-control" id="sharedUrl" value="<%= @token %>" readonly>
-    <button class="btn btn-outline-secondary" type="button" onclick="copySharedUrl()">コピー</button>
-  </div>
-  
-  <!-- リンクを一時的にroot_urlにしている -->
-  <a href="<%= root_url %>" class="btn btn-primary">共有URLへアクセス</a>
+    <a href="#" id="sharedLink" class="btn btn-primary">共有URLへアクセス</a>
 </div>
 
 <script>
-  function copySharedUrl() {
-    const sharedUrlInput = document.getElementById('sharedUrl');
-    sharedUrlInput.select();
-    sharedUrlInput.setSelectionRange(0, 99999);
-    document.execCommand('copy');
-    alert('コピーしました: ' + sharedUrlInput.value);
-  }
+    function copySharedUrl() {
+        const sharedUrlInput = document.getElementById('sharedUrl');
+        sharedUrlInput.select();
+        sharedUrlInput.setSelectionRange(0, 99999);
+        document.execCommand('copy');
+        alert('コピーしました: ' + sharedUrlInput.value);
+    }
+                
+    // 現在のリンクを取得する関数
+    function getCurrentUrl() {
+        return window.location.href;
+    }
+
+    // ページが読み込まれたときにURLを設定
+    window.onload = function() {
+        const sharedUrl = getCurrentUrl();
+        document.getElementById('sharedUrl').value = sharedUrl;
+        document.getElementById('sharedLink').href = sharedUrl;
+    }
 </script>
