@@ -3,12 +3,12 @@ class ShiftsController < ApplicationController
     end
 
     def create
-        logger.debug "Params: #{params.inspect}"
         @shift = Shift.new(shift_params)
         if @shift.save
             shift_id = @shift.id # Get the id of @shift
             flash[:success] = "保存成功"
-            link = id_to_token(@shift.id)
+            link = Shift.id_to_token(@shift.id)
+            id_from_link = Shift.token_to_id(link)
             redirect_to share_path(link)
         else
             flash.now[:danger] = "保存失敗"
@@ -16,10 +16,15 @@ class ShiftsController < ApplicationController
         end
     end
     
-    def edit
-    end
+    def add
+        token = params[:token].to_s
+        shift_id = Shift.token_to_id(token)
+        @shift = Shift.find_by(id: shift_id)
 
-    def update
+        unless @shift
+            flash[:danger] = "シフトが見つかりません。URLを確認してください"
+            render :new
+        end
     end
 
     def destroy

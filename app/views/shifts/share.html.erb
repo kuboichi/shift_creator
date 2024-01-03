@@ -6,7 +6,8 @@
     </div>
                 
     <!-- リンクを一時的にroot_urlにしている -->
-    <a href="#" id="sharedLink" class="btn btn-primary">共有URLへアクセス</a>
+    <%= link_to "共有URLへアクセス", "#", class: "btn btn-primary", id: "sharedLink" %>
+    <%# <a href="#" id="sharedLink" class="btn btn-primary">共有URLへアクセス</a> %>
 </div>
 
 <script>
@@ -26,7 +27,10 @@
     // ページが読み込まれたときにURLを設定
     window.onload = function() {
         const sharedUrl = getCurrentUrl();
-        document.getElementById('sharedUrl').value = sharedUrl;
-        document.getElementById('sharedLink').href = sharedUrl;
+        const originUrl = sharedUrl.split('share.')[0];
+        const token = sharedUrl.split('share.')[1];
+        const Url = originUrl + token;
+        document.getElementById('sharedUrl').value = Url;
+        document.getElementById('sharedLink').href = Url;
     }
 </script>

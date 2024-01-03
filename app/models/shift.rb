@@ -2,12 +2,14 @@ class Shift < ApplicationRecord
     include ActiveModel::Validations
     validates_with WeekdayPeopleValidator
 
-    def id_to_token(id)
-        Base64.urlsafe_encode64(id.to_s)
-    end
+    class << self
+        def id_to_token(id)
+            Base64.urlsafe_encode64(id.to_s)
+        end
 
-    def token_to_id(token)
-        Base64.urlsafe_decode64(token)
+        def token_to_id(token)
+            Base64.urlsafe_decode64(token)
+        end
     end
 
     # 各時間帯ごとの必要な人数のカラムを指定
