@@ -1,0 +1,2 @@
+module WorkerDesireHelper
+end

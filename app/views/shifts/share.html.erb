@@ -29,7 +29,7 @@
         const sharedUrl = getCurrentUrl();
         const originUrl = sharedUrl.split('share.')[0];
         const token = sharedUrl.split('share.')[1];
-        const Url = originUrl + token;
+        const Url = originUrl + 'show/' + token;
         document.getElementById('sharedUrl').value = Url;
         document.getElementById('sharedLink').href = Url;
     }

@@ -1,4 +1,5 @@
 class Shift < ApplicationRecord
+    has_many :worker_desires, dependent: :destroy
     include ActiveModel::Validations
     validates_with WeekdayPeopleValidator
 

@@ -16,13 +16,13 @@ class ShiftsController < ApplicationController
         end
     end
     
-    def add
+    def show
         token = params[:token].to_s
         shift_id = Shift.token_to_id(token)
         @shift = Shift.find_by(id: shift_id)
 
         unless @shift
-            flash[:danger] = "シフトが見つかりません。URLを確認してください"
+            flash[:danger] = "共有先が見つかりません。URLを確認してください"
             render :new
         end
     end
