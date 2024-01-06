@@ -1,44 +1,51 @@
 <% japanese_days = ["月", "火", "水", "木", "金", "土", "日"] %>
 <% hours = (0..23).to_a %>
 
-<button id="showTable">入力する</button>
+<button id="showTable" class="btn btn-primary">入力する</button>
 
-
-<table id="myTable" style="display: none;">
-  <tr>
-    <th>Day</th>
-    <th>Start Time</th>
-    <th>End Time</th>
-  </tr>
-  <% japanese_days.each do |day| %>
+<table id="myTable" class="table" style="display: none;">
+  <thead class="thead-dark">
     <tr>
-      <td><%= day %></td>
-      <td>
-        <select>
-          <% hours.each do |hour| %>
-            <option value="<%= hour %>"><%= hour %>:00</option>
-          <% end %>
-        </select>
-      </td>
-      <td>
-        <select>
-          <% hours.each do |hour| %>
-            <option value="<%= hour %>"><%= hour %>:00</option>
-          <% end %>
-        </select>
-      </td>
+      <th>Day</th>
+      <th>Start Time</th>
+      <th>End Time</th>
     </tr>
-  <% end %>
+  </thead>
+  <tbody>
+    <% japanese_days.each do |day| %>
+      <tr>
+        <td><%= day %></td>
+        <td>
+          <select class="form-control">
+            <% hours.each do |hour| %>
+              <option value="<%= hour %>"><%= hour %>:00</option>
+            <% end %>
+          </select>
+        </td>
+        <td>
+          <select class="form-control">
+            <% hours.each do |hour| %>
+              <option value="<%= hour %>"><%= hour %>:00</option>
+            <% end %>
+          </select>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
 </table>
 
 
 <%= form_with(model: WorkerDesire.new, url: worker_desires_path, method: :post) do |form| %>
   <%= form.number_field :shift_id, id: "shiftID", style: "display: none;", value: @shift.id %>
   <div id="inputFields" style="display: none;">
-    <label for="name">名前:</label><br>
-    <%= form.text_field :name, id: "name" %><br>
-    <label for="comment">コメント:</label><br>
-    <%= form.text_area :comment, id: "comment" %><br>
+    <div class="form-group col-md-2 position-relative">
+      <label for="name">名前:</label><br>
+      <%= form.text_field :name, id: "name", class: "form-control" %><br>
+    </div>
+    <div class="form-group col-md-5 position-relative">
+      <label for="comment">コメント:</label><br>
+      <%= form.text_area :comment, id: "comment", class: "form-control" %><br>
+    </div>
     <% days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] %>
     <% days.each do |day| %>
       <%= form.hidden_field "start_time_#{day}".to_sym, id: "start_time_#{day}" %>
@@ -47,6 +54,34 @@
     <%= form.submit "提出する", id: "submitButton" %>
   </div>
 <% end %> 
+
+
+<h2>提出済みのシフト</h2>
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">名前</th>
+      <% japanese_days.each do |day| %>
+        <th scope="col"><%= day %></th>
+      <% end %>
+      <th scope="col">コメント</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @shift.worker_desires.each do |worker| %>
+      <tr>
+        <td><%= worker.name %></td>
+        <% days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] %>
+        <% days.each do |day| %>
+          <td>
+            <%= worker.send("start_time_#{day}").strftime('%H:%M') %> ~ <%= worker.send("end_time_#{day}").strftime('%H:%M') %>
+          </td>
+        <% end %>
+        <td><%= worker.comment %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
 
 
 <script>

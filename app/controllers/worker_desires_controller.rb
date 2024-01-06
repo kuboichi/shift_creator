@@ -8,11 +8,11 @@ class WorkerDesiresController < ApplicationController
         @worker_desire = @shift.worker_desires.build(worker_desire_params)
         if @worker_desire.save
             flash[:success] = "保存成功"
-            redirect_to root_url
         else
             flash[:danger] = "保存失敗"
-            redirect_to root_url
+            puts @worker_desire.errors.full_messages
         end
+        redirect_to request.referrer || root_url
     end
 
     private
