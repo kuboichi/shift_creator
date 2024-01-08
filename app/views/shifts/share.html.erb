@@ -4,10 +4,8 @@
         <input type="text" class="form-control" id="sharedUrl" readonly>
         <button class="btn btn-outline-secondary" type="button" onclick="copySharedUrl()">コピー</button>
     </div>
-                
-    <!-- リンクを一時的にroot_urlにしている -->
+
     <%= link_to "共有URLへアクセス", "#", class: "btn btn-primary", id: "sharedLink" %>
-    <%# <a href="#" id="sharedLink" class="btn btn-primary">共有URLへアクセス</a> %>
 </div>
 
 <script>
