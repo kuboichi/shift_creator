@@ -1,5 +1,6 @@
 <% japanese_days = ["月", "火", "水", "木", "金", "土", "日"] %>
 <% hours = (0..23).to_a %>
+<% minutes = [0, 30] %>
 
 <button id="showTable" class="btn btn-primary">入力する</button>
 
@@ -18,14 +19,18 @@
         <td>
           <select class="form-control">
             <% hours.each do |hour| %>
-              <option value="<%= hour %>"><%= hour %>:00</option>
+              <% minutes.each do |minute| %>
+                <option value="<%= Time.parse(hour.to_s + ":" + minute.to_s) %>"><%= hour %>:<%= format('%02d', minute) %></option>
+              <% end %>
             <% end %>
           </select>
         </td>
         <td>
           <select class="form-control">
             <% hours.each do |hour| %>
-              <option value="<%= hour %>"><%= hour %>:00</option>
+              <% minutes.each do |minute| %>
+                <option value="<%= Time.parse(hour.to_s + ":" + minute.to_s) %>"><%= hour %>:<%= format('%02d', minute) %></option>
+              <% end %>
             <% end %>
           </select>
         </td>
