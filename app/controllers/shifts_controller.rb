@@ -3,25 +3,34 @@ class ShiftsController < ApplicationController
     end
 
     def create
-        logger.debug "Params: #{params.inspect}"
         @shift = Shift.new(shift_params)
         if @shift.save
+            shift_id = @shift.id # Get the id of @shift
             flash[:success] = "保存成功"
-            redirect_to root_path
-            #本当は別のページにredirectする
+            link = Shift.id_to_token(@shift.id)
+            id_from_link = Shift.token_to_id(link)
+            redirect_to share_path(link)
         else
             flash.now[:danger] = "保存失敗"
             render :new
         end
     end
     
-    def edit
-    end
+    def show
+        token = params[:token].to_s
+        shift_id = Shift.token_to_id(token)
+        @shift = Shift.find_by(id: shift_id)
 
-    def update
+        unless @shift
+            flash[:danger] = "共有先が見つかりません。URLを確認してください"
+            render :new
+        end
     end
 
     def destroy
+    end
+
+    def share
     end
 
     private

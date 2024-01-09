@@ -64,8 +64,17 @@ RSpec.configure do |config|
   # config.filter_gems_from_backtrace("gem name")
 
   config.before(:each, type: :system) do
-    driven_by(:selenium_chrome_headless)
-    # driven_by(:selenium_chrome)
-    # driven_by(:rack_test)
+    if ENV['WITHHEAD'].present?
+      driven_by(:selenium_chrome)
+    else
+      driven_by(:selenium_chrome_headless)
+    end
+  end
+
+  Capybara.register_driver :chrome_headless do |app|
+    capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
+      chromeOptions: { args: %w[--headless --disable-features=site-per-process] }
+    )
+    Capybara::Selenium::Driver.new(app, browser: :chrome, desired_capabilities: capabilities)
   end
 end

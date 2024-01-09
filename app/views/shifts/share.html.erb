@@ -1,0 +1,34 @@
+<div class="container">
+    <p class="h6">以下のURLをアルバイトの方に共有して下さい。</p>
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" id="sharedUrl" readonly>
+        <button class="btn btn-outline-secondary" type="button" onclick="copySharedUrl()">コピー</button>
+    </div>
+
+    <%= link_to "共有URLへアクセス", "#", class: "btn btn-primary", id: "sharedLink" %>
+</div>
+
+<script>
+    function copySharedUrl() {
+        const sharedUrlInput = document.getElementById('sharedUrl');
+        sharedUrlInput.select();
+        sharedUrlInput.setSelectionRange(0, 99999);
+        document.execCommand('copy');
+        alert('コピーしました: ' + sharedUrlInput.value);
+    }
+                
+    // 現在のリンクを取得する関数
+    function getCurrentUrl() {
+        return window.location.href;
+    }
+
+    // ページが読み込まれたときにURLを設定
+    window.onload = function() {
+        const sharedUrl = getCurrentUrl();
+        const originUrl = sharedUrl.split('share.')[0];
+        const token = sharedUrl.split('share.')[1];
+        const Url = originUrl + 'show/' + token;
+        document.getElementById('sharedUrl').value = Url;
+        document.getElementById('sharedLink').href = Url;
+    }
+</script>

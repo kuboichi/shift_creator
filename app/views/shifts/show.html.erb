@@ -1,0 +1,119 @@
+<% japanese_days = ["月", "火", "水", "木", "金", "土", "日"] %>
+<% hours = (0..23).to_a %>
+<% minutes = [0, 30] %>
+
+<button id="showTable" class="btn btn-primary">入力する</button>
+
+<table id="myTable" class="table" style="display: none;">
+  <thead class="thead-dark">
+    <tr>
+      <th>Day</th>
+      <th>Start Time</th>
+      <th>End Time</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% japanese_days.each do |day| %>
+      <tr>
+        <td><%= day %></td>
+        <td>
+          <select class="form-control">
+            <% hours.each do |hour| %>
+              <% minutes.each do |minute| %>
+                <option value="<%= Time.parse(hour.to_s + ":" + minute.to_s) %>"><%= hour %>:<%= format('%02d', minute) %></option>
+              <% end %>
+            <% end %>
+          </select>
+        </td>
+        <td>
+          <select class="form-control">
+            <% hours.each do |hour| %>
+              <% minutes.each do |minute| %>
+                <option value="<%= Time.parse(hour.to_s + ":" + minute.to_s) %>"><%= hour %>:<%= format('%02d', minute) %></option>
+              <% end %>
+            <% end %>
+          </select>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+
+<%= form_with(model: WorkerDesire.new, url: worker_desires_path, method: :post) do |form| %>
+  <%= form.number_field :shift_id, id: "shiftID", style: "display: none;", value: @shift.id %>
+  <div id="inputFields" style="display: none;">
+    <div class="form-group col-md-2 position-relative">
+      <label for="name">名前:</label><br>
+      <%= form.text_field :name, id: "name", class: "form-control" %><br>
+    </div>
+    <div class="form-group col-md-5 position-relative">
+      <label for="comment">コメント:</label><br>
+      <%= form.text_area :comment, id: "comment", class: "form-control" %><br>
+    </div>
+    <% days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] %>
+    <% days.each do |day| %>
+      <%= form.hidden_field "start_time_#{day}".to_sym, id: "start_time_#{day}" %>
+      <%= form.hidden_field "end_time_#{day}".to_sym, id: "end_time_#{day}" %>
+    <% end %>
+    <%= form.submit "提出する", id: "submitButton" %>
+  </div>
+<% end %> 
+
+
+<h2>提出済みのシフト</h2>
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">名前</th>
+      <% japanese_days.each do |day| %>
+        <th scope="col"><%= day %></th>
+      <% end %>
+      <th scope="col">コメント</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @shift.worker_desires.each do |worker| %>
+      <tr>
+        <td><%= worker.name %></td>
+        <% days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] %>
+        <% days.each do |day| %>
+          <td>
+            <%= worker.send("start_time_#{day}").strftime('%H:%M') %> ~ <%= worker.send("end_time_#{day}").strftime('%H:%M') %>
+          </td>
+        <% end %>
+        <td><%= worker.comment %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+
+<script>
+// 「入力する」ボタンを押したときにテーブルなどを表示して、ボタンを非表示にする
+  document.getElementById('showTable').addEventListener('click', function() {
+    document.getElementById('myTable').style.display = 'table';
+    this.style.display = 'none';
+    document.getElementById('inputFields').style.display = 'block';
+    document.getElementById('submitButton').style.display = 'block';
+  });
+
+  document.getElementById('submitButton').addEventListener('click', function() {
+    // 「提出する」ボタンを押したときに始めの状態に戻す
+    document.getElementById('myTable').style.display = 'none';
+    this.style.display = 'none';
+    document.getElementById('inputFields').style.display = 'none';
+    document.getElementById('showTable').style.display = 'block';
+
+    // テーブルの値をフォームに入れる
+    var days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+    var rows = document.getElementById('myTable').getElementsByTagName('tr');
+    for (var i = 1; i < rows.length; i++) {
+      var day = days[i-1];
+      var startTimeSelect = rows[i].getElementsByTagName('select')[0];
+      var endTimeSelect = rows[i].getElementsByTagName('select')[1];
+      document.getElementById('start_time_' + day).value = startTimeSelect.options[startTimeSelect.selectedIndex].value;
+      document.getElementById('end_time_' + day).value = endTimeSelect.options[endTimeSelect.selectedIndex].value;
+    }
+  });
+</script>

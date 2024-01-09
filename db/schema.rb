@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_12_22_064958) do
+ActiveRecord::Schema[7.1].define(version: 2024_01_04_091532) do
   create_table "shifts", force: :cascade do |t|
     t.integer "people_needed"
     t.datetime "created_at", null: false
@@ -353,4 +353,28 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_22_064958) do
     t.integer "week_day_47_6", default: 0
   end
 
+  create_table "worker_desires", force: :cascade do |t|
+    t.string "name"
+    t.text "comment"
+    t.time "start_time_monday"
+    t.time "end_time_monday"
+    t.time "start_time_tuesday"
+    t.time "end_time_tuesday"
+    t.time "start_time_wednesday"
+    t.time "end_time_wednesday"
+    t.time "start_time_thursday"
+    t.time "end_time_thursday"
+    t.time "start_time_friday"
+    t.time "end_time_friday"
+    t.time "start_time_saturday"
+    t.time "end_time_saturday"
+    t.time "start_time_sunday"
+    t.time "end_time_sunday"
+    t.integer "shift_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["shift_id"], name: "index_worker_desires_on_shift_id"
+  end
+
+  add_foreign_key "worker_desires", "shifts"
 end
