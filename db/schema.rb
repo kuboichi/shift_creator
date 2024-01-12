@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_01_04_091532) do
+ActiveRecord::Schema[7.1].define(version: 2024_01_10_085127) do
   create_table "shifts", force: :cascade do |t|
     t.integer "people_needed"
     t.datetime "created_at", null: false
@@ -373,6 +373,20 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_04_091532) do
     t.integer "shift_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "determined_start_monday"
+    t.text "determined_end_monday"
+    t.text "determined_start_tuesday"
+    t.text "determined_end_tuesday"
+    t.text "determined_start_wednesday"
+    t.text "determined_end_wednesday"
+    t.text "determined_start_thursday"
+    t.text "determined_end_thursday"
+    t.text "determined_start_friday"
+    t.text "determined_end_friday"
+    t.text "determined_start_saturday"
+    t.text "determined_end_saturday"
+    t.text "determined_start_sunday"
+    t.text "determined_end_sunday"
     t.index ["shift_id"], name: "index_worker_desires_on_shift_id"
   end
 

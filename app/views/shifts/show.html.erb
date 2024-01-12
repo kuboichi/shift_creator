@@ -4,7 +4,7 @@
 
 <button id="showTable" class="btn btn-primary">入力する</button>
 
-<table id="myTable" class="table" style="display: none;">
+<table id="submitTable" class="table" style="display: none;">
   <thead class="thead-dark">
     <tr>
       <th>Day</th>
@@ -62,7 +62,7 @@
 
 
 <h2>提出済みのシフト</h2>
-<table class="table">
+<table class="workerTable">
   <thead class="thead-dark">
     <tr>
       <th scope="col">名前</th>
@@ -79,7 +79,11 @@
         <% days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] %>
         <% days.each do |day| %>
           <td>
-            <%= worker.send("start_time_#{day}").strftime('%H:%M') %> ~ <%= worker.send("end_time_#{day}").strftime('%H:%M') %>
+            <% if worker.send("start_time_#{day}") == worker.send("end_time_#{day}") %>
+              x
+            <% else %>
+              <%= worker.send("start_time_#{day}").strftime('%H:%M') %> ~ <%= worker.send("end_time_#{day}").strftime('%H:%M') %>
+            <% end %>
           </td>
         <% end %>
         <td><%= worker.comment %></td>
@@ -88,11 +92,13 @@
   </tbody>
 </table>
 
+<%= link_to "シフトを自動作成する", determined_path(Shift.id_to_token(@shift.id)), class: "btn btn-primary", id: "createShift" %>
+
 
 <script>
 // 「入力する」ボタンを押したときにテーブルなどを表示して、ボタンを非表示にする
   document.getElementById('showTable').addEventListener('click', function() {
-    document.getElementById('myTable').style.display = 'table';
+    document.getElementById('submitTable').style.display = 'table';
     this.style.display = 'none';
     document.getElementById('inputFields').style.display = 'block';
     document.getElementById('submitButton').style.display = 'block';
@@ -100,14 +106,14 @@
 
   document.getElementById('submitButton').addEventListener('click', function() {
     // 「提出する」ボタンを押したときに始めの状態に戻す
-    document.getElementById('myTable').style.display = 'none';
+    document.getElementById('submitTable').style.display = 'none';
     this.style.display = 'none';
     document.getElementById('inputFields').style.display = 'none';
     document.getElementById('showTable').style.display = 'block';
 
     // テーブルの値をフォームに入れる
     var days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
-    var rows = document.getElementById('myTable').getElementsByTagName('tr');
+    var rows = document.getElementById('submitTable').getElementsByTagName('tr');
     for (var i = 1; i < rows.length; i++) {
       var day = days[i-1];
       var startTimeSelect = rows[i].getElementsByTagName('select')[0];
