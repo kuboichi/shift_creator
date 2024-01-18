@@ -50,7 +50,7 @@ class Shift < ApplicationRecord
             (0..47).each do |time|
                 people_work = 0
                 shift.worker_desires.each do |worker|
-                    if worker.send("determined_start_#{int_to_day(week_day)}").nil?
+                    if worker.send("determined_start_#{int_to_day(week_day)}").nil? || worker.send("determined_end_#{int_to_day(week_day)}").nil?
                         next
                     end
                     worker_start = timeString_to_int( worker.send("determined_start_#{int_to_day(week_day)}") )
@@ -60,10 +60,6 @@ class Shift < ApplicationRecord
                     end
                 end
                 if people_work < shift.send("week_day_#{time}_#{week_day}")
-                    puts people_work
-                    puts shift.send("week_day_#{time}_#{week_day}")
-                    puts time
-                    puts week_day
                     return false
                 end
             end
@@ -88,12 +84,12 @@ class Shift < ApplicationRecord
                             people_added[time][week_day] += 1
                             if worker.send("determined_start_#{int_to_day(week_day)}").nil?
                                 worker.send("determined_start_#{int_to_day(week_day)}=", timeInt_to_string(time))
-                            else
-                                worker.send("determined_end_#{int_to_day(week_day)}=", timeInt_to_string(time))
                             end
+                            # shiftモデルとworker_desireモデルは時間軸が異なるため、1時間後の時間帯を指定するために+1している
+                            worker.send("determined_end_#{int_to_day(week_day)}=", timeInt_to_string(time + 1))
                         end
                         # 必要な人数に達したら次の時間帯へ
-                        if shift.send("week_day_#{time}_#{week_day}") == people_added[time][week_day]
+                        if people_needed == people_added[time][week_day]
                             break
                         end
                     end
