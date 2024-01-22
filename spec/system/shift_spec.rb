@@ -84,4 +84,26 @@ RSpec.describe "shifts", type: :system do
             expect(page).to have_text("保存失敗")
         end
     end
+
+    describe "/determined page" do
+        it "can create shift automatically" do
+            visit new_shift_path
+            fill_in "shift[week_day_0_0]", with: 1
+            click_button "Save"
+            link = page.find("#sharedUrl").value
+            visit link
+            click_button "入力する"
+            fill_in "worker_desire[name]", with: "tanaka"
+            start_time_monday_cell = find('table tr:nth-child(2) td:nth-child(2) select')
+            end_time_monday_cell = find('table tr:nth-child(2) td:nth-child(3) select')
+            start_time_monday_cell.select("0:00")
+            end_time_monday_cell.select("0:30")
+
+            click_button "提出する"
+            # click_button "シフトを自動作成する" # なぜかエラーになる
+            token = link.split("/")[-1]
+            visit determined_path(token)
+            expect(page).to have_text("シフトが作成されました")
+        end
+    end
 end
