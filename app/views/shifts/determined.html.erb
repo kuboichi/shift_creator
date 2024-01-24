@@ -1,0 +1,30 @@
+<% japanese_days = ["月", "火", "水", "木", "金", "土", "日"] %>
+<% puts @shift.worker_desires.inspect %>
+<h2>作成されたシフト</h2>
+<table class="shiftTable">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">名前</th>
+      <% japanese_days.each do |day| %>
+        <th scope="col"><%= day %></th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <% @shift.worker_desires.each do |worker| %>
+      <tr>
+        <td><%= worker.name %></td>
+        <% days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] %>
+        <% days.each do |day| %>
+          <td>
+            <% if worker.send("start_time_#{day}") == worker.send("end_time_#{day}") %>
+              x
+            <% else %>
+                <%= worker.send("determined_start_#{day}") %> ~ <%= worker.send("determined_end_#{day}") %>
+            <% end %>
+          </td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
