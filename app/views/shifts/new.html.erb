@@ -1,4 +1,58 @@
+<% japanese_days = ["月", "火", "水", "木", "金", "土", "日"] %>
+<% hours = (0..23).to_a %>
+<% minutes = [0, 30] %>
+
+
 <h1>各時間に必要な人数</h1>
+
+<button class= "btn btn-primary" id= "addShiftButton" >入力欄を増やす</button>
+
+
+<table id="shiftRegisterTable" class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th>曜日</th>
+      <th>開始時間</th>
+      <th>終了時間</th>
+      <th>必要な人数</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <select class="form-control">
+          <% japanese_days.each do |day| %>
+            <option value="<%= day %>"><%= day %></option>
+          <% end %>
+        </select>
+      </td>
+      <td>
+        <select class="form-control">
+          <% hours.each do |hour| %>
+            <% minutes.each do |minute| %>
+              <option value="<%= Time.parse(hour.to_s + ":" + minute.to_s) %>"><%= hour %>:<%= format('%02d', minute) %></option>
+            <% end %>
+          <% end %>
+        </select>
+      </td>
+      <td>
+        <select class="form-control">
+          <% hours.each do |hour| %>
+            <% minutes.each do |minute| %>
+              <option value="<%= Time.parse(hour.to_s + ":" + minute.to_s) %>"><%= hour %>:<%= format('%02d', minute) %></option>
+            <% end %>
+          <% end %>
+        </select>
+      </td>
+      <td>
+        <select class="form-control">
+          <% (0..10).each do |num| %>
+            <option value="<%= num %>"><%= num %></option>
+          <% end %>
+        </select>
+    </tr>
+  </tbody>
+</table>
 
 <%= form_with(model: Shift.new, url: shifts_path, method: :post) do |form| %>
   <table border="1">
@@ -30,5 +84,24 @@
     </tbody>
   </table>
 
-  <%= form.submit "Save" %>
+  <%= form.submit "保存" %>
 <% end %>
+
+<script>
+  document.getElementById("addShiftButton").addEventListener("click", function() {
+    var table = document.getElementById("shiftRegisterTable");
+    var newRow = table.insertRow(-1);
+
+    // Create cells for the new row
+    var dayCell = newRow.insertCell(0);
+    var startTimeCell = newRow.insertCell(1);
+    var endTimeCell = newRow.insertCell(2);
+    var requiredPeopleCell = newRow.insertCell(3);
+
+    // Set the content of the cells
+    dayCell.innerHTML = '<select class="form-control"><% japanese_days.each do |day| %><option value="<%= day %>"><%= day %></option><% end %></select>';
+    startTimeCell.innerHTML = '<select class="form-control"><% hours.each do |hour| %><% minutes.each do |minute| %><option value="<%= Time.parse(hour.to_s + ":" + minute.to_s) %>"><%= hour %>:<%= format('%02d', minute) %></option><% end %><% end %></select>';
+    endTimeCell.innerHTML = '<select class="form-control"><% hours.each do |hour| %><% minutes.each do |minute| %><option value="<%= Time.parse(hour.to_s + ":" + minute.to_s) %>"><%= hour %>:<%= format('%02d', minute) %></option><% end %><% end %></select>';
+    requiredPeopleCell.innerHTML = '<select class="form-control"><% (0..10).each do |num| %><option value="<%= num %>"><%= num %></option><% end %></select>';
+  });
+</script>
