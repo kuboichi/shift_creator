@@ -84,7 +84,7 @@
           </td> 
           <% (0..6).each do |week_day| %>
             <td>
-              <%= form.number_field "week_day_#{time}_#{week_day}", value: 0 %>
+              <%= form.number_field "week_day_#{time}_#{week_day}", value: 0, min: 0 %>
             </td>
           <% end %>
         </tr>
