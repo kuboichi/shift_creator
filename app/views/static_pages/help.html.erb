@@ -1,8 +1,24 @@
 <div class="container mt-5">
     <h2>よくある質問</h2>
-    <p>Q.基本的な使い方を教えてください</p>
-    <p>A.ページ上部のCreateを押して、必要な人数を入力します。共有リンクが作成されるので従業員に共有してください。</p>
-    <p>従業員全員が希望のシフトを入力した後にシフトを作成ボタンを押すことでシフトを作成することが出来ます。</p>
-    <p>Q.機能を追加される予定はありますか？</p>
-    <p>A.はい。このサイトはまだ未完成で使いやすさや機能の充実性を随時高めていきます。</p>
+    <div class="faq-container">
+        <div class="faq-item" onclick="toggleAnswer(1)">Q.基本的な使い方を教えてください</div>
+        <div class="faq-answer" id="answer1">
+            <p>A.ページ上部のCreateを押して、必要な人数を入力します。</p>
+            <p>共有リンクが作成されるので従業員に共有してください。</p>
+            <p>従業員全員が希望のシフトを入力した後にシフトを作成ボタンを押すことでシフトを作成することが出来ます。</p>
+        </div>
+        <div class="faq-item" onclick="toggleAnswer(2)">Q.機能を追加される予定はありますか？</div>
+        <div class="faq-answer" id="answer2">A.はい。このサイトはまだ未完成で使いやすさや機能の充実性を随時高めていきます。</div>
+    </div>
 </div>
+
+<script>
+  function toggleAnswer(id) {
+    var answer = document.getElementById('answer' + id);
+    if (answer.style.display === 'none') {
+      answer.style.display = 'block';
+    } else {
+      answer.style.display = 'none';
+    }
+  }
+</script>

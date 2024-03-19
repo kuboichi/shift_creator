@@ -2,14 +2,16 @@
 <% hours = (0..23).to_a %>
 <% minutes = [0, 30] %>
 
-<button id="showTable" class="btn btn-primary">入力する</button>
+<div class="text-center btn-space">
+  <button id="showTable" class="btn btn-primary">シフトの希望を入力する</button>
+</div>
 
 <table id="submitTable" class="table" style="display: none;">
   <thead class="thead-dark">
     <tr>
-      <th>Day</th>
-      <th>Start Time</th>
-      <th>End Time</th>
+      <th>曜日</th>
+      <th>開始時間</th>
+      <th>終了時間</th>
     </tr>
   </thead>
   <tbody>
@@ -56,44 +58,48 @@
       <%= form.hidden_field "start_time_#{day}".to_sym, id: "start_time_#{day}" %>
       <%= form.hidden_field "end_time_#{day}".to_sym, id: "end_time_#{day}" %>
     <% end %>
-    <%= form.submit "提出する", id: "submitButton" %>
+    <%= form.submit "シフトの希望を提出する", id: "submitButton" %>
   </div>
 <% end %> 
 
-
-<h2>提出済みのシフト</h2>
-<table class="workerTable">
-  <thead class="thead-dark">
-    <tr>
-      <th scope="col">名前</th>
-      <% japanese_days.each do |day| %>
-        <th scope="col"><%= day %></th>
-      <% end %>
-      <th scope="col">コメント</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @shift.worker_desires.each do |worker| %>
-      <tr>
-        <td><%= worker.name %></td>
-        <% days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] %>
-        <% days.each do |day| %>
-          <td>
-            <% if worker.send("start_time_#{day}") == worker.send("end_time_#{day}") %>
-              x
-            <% else %>
-              <%= worker.send("start_time_#{day}").strftime('%H:%M') %> ~ <%= worker.send("end_time_#{day}").strftime('%H:%M') %>
+<div class=container>
+  <h2>提出済みのシフト</h2>
+  <table class="workerTable">
+    <% if @shift.worker_desires.count >= 1 %>
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">名前</th>
+          <% japanese_days.each do |day| %>
+            <th scope="col"><%= day %></th>
+          <% end %>
+          <th scope="col">コメント</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @shift.worker_desires.each do |worker| %>
+          <tr>
+            <td><%= worker.name %></td>
+            <% days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] %>
+            <% days.each do |day| %>
+              <td>
+                <% if worker.send("start_time_#{day}") == worker.send("end_time_#{day}") %>
+                  x
+                <% else %>
+                  <%= worker.send("start_time_#{day}").strftime('%H:%M') %> ~ <%= worker.send("end_time_#{day}").strftime('%H:%M') %>
+                <% end %>
+              </td>
             <% end %>
-          </td>
+            <td><%= worker.comment %></td>
+          </tr>
         <% end %>
-        <td><%= worker.comment %></td>
-      </tr>
+      </tbody>
+    <% else %>
+      <p>まだ一つもシフトは提出されていません。</p>
     <% end %>
-  </tbody>
-</table>
+  </table>
 
-<%= link_to "シフトを自動作成する", determined_path(Shift.id_to_token(@shift.id)), class: "btn btn-primary", id: "createShift" %>
-
+  <%= link_to "提出済みのシフトからシフト表を作成する", determined_path(Shift.id_to_token(@shift.id)), class: "btn btn-primary", id: "createShift" %>
+</div>
 
 <script>
 // 「入力する」ボタンを押したときにテーブルなどを表示して、ボタンを非表示にする

@@ -16,7 +16,7 @@ RSpec.describe "shifts", type: :system do
         it 'can create a new shift' do
             visit new_shift_path
             expect {
-                click_button "Save"
+                click_button "保存"
             }.to change(Shift, :count).by(1)
             expect(page).to have_text "共有URLへアクセス"
         end
@@ -24,7 +24,7 @@ RSpec.describe "shifts", type: :system do
         it "return error when creating a wrong shift data" do
             visit new_shift_path
             fill_in "shift[week_day_0_0]", with: nil
-            click_button "Save"
+            click_button "保存"
             expect(page).to have_content "保存失敗"
         end
     end
@@ -32,7 +32,7 @@ RSpec.describe "shifts", type: :system do
     describe "/share page" do
         before do
             visit new_shift_path
-            click_button "Save"
+            click_button "保存"
         end
 
         # headありのテストでacceptを押した場合しか成功しない
@@ -52,7 +52,7 @@ RSpec.describe "shifts", type: :system do
     describe "/show page" do
         before do
             visit new_shift_path
-            click_button "Save"
+            click_button "保存"
             @link = page.find("#sharedUrl").value
             visit @link
         end
@@ -89,7 +89,7 @@ RSpec.describe "shifts", type: :system do
         it "can create shift automatically" do
             visit new_shift_path
             fill_in "shift[week_day_0_0]", with: 1
-            click_button "Save"
+            click_button "保存"
             link = page.find("#sharedUrl").value
             visit link
             click_button "入力する"
